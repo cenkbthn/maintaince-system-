@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Level Test</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f0f;
+    color: #e8e8e8;
+    padding: 16px;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    padding: 24px 0 8px;
+    color: #fff;
+  }
+  .subtitle {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+  .section {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #2a2a2a;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: #6c63ff;
+    margin-bottom: 20px;
+  }
+  .question {
+    margin-bottom: 24px;
+  }
+  .question:last-child { margin-bottom: 0; }
+  .q-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 8px;
+  }
+  .q-num {
+    color: #6c63ff;
+    min-width: 24px;
+  }
+  .q-text { flex: 1; }
+  .options { display: flex; flex-direction: column; gap: 10px; }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: #222;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .option:active { transform: scale(0.98); }
+  .option.selected {
+    border-color: #6c63ff;
+    background: #1e1a3a;
+  }
+  .option input[type="radio"] { display: none; }
+  .radio-dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .option.selected .radio-dot {
+    border-color: #6c63ff;
+    background: #6c63ff;
+  }
+  .radio-dot::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .option.selected .radio-dot::after { opacity: 1; }
+  .option-text { font-size: 15px; color: #ddd; line-height: 1.5; }
+  .option.selected .option-text { color: #fff; }
+
+  /* Word select chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+  .chip {
+    background: #222;
+    border: 2px solid #333;
+    border-radius: 30px;
+    padding: 10px 18px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #ccc;
+    transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .chip.selected {
+    background: #1e1a3a;
+    border-color: #6c63ff;
+    color: #fff;
+  }
+  .chip:active { transform: scale(0.95); }
+
+  /* Textarea */
+  textarea, .text-input {
+    width: 100%;
+    background: #222;
+    border: 2px solid #333;
+    border-radius: 12px;
+    padding: 14px;
+    color: #e8e8e8;
+    font-size: 15px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.6;
+  }
+  textarea:focus, .text-input:focus { border-color: #6c63ff; }
+  textarea { min-height: 90px; }
+  .text-input { min-height: 52px; }
+  .input-label {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+  .input-label:first-child { margin-top: 0; }
+
+  /* Fill gap sentence */
+  .gap-sentence {
+    font-size: 15px;
+    color: #ccc;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: #222;
+    border-radius: 8px;
+    font-style: italic;
+  }
+  .blank { color: #6c63ff; font-style: normal; font-weight: 700; }
+
+  /* Progress */
+  .progress-bar {
+    background: #2a2a2a;
+    border-radius: 8px;
+    height: 6px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6c63ff, #9d50bb);
+    border-radius: 8px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+
+  /* Submit */
+  .submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #6c63ff, #9d50bb);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 18px;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s, transform 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .submit-btn:active { opacity: 0.85; transform: scale(0.98); }
+
+  /* Result */
+  .result-box {
+    display: none;
+    background: #1a1a2e;
+    border: 2px solid #6c63ff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-top: 20px;
+    text-align: center;
+  }
+  .result-box.show { display: block; }
+  .result-score {
+    font-size: 52px;
+    font-weight: 900;
+    color: #6c63ff;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .result-level {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .result-msg {
+    font-size: 14px;
+    color: #aaa;
+    line-height: 1.7;
+  }
+  .copy-btn {
+    background: #2a2a2a;
+    color: #ccc;
+    border: 1px solid #444;
+    border-radius: 10px;
+    padding: 12px 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 16px;
+    width: 100%;
+    transition: background 0.2s;
+  }
+  .copy-btn:active { background: #333; }
+
+  .divider {
+    height: 1px;
+    background: #2a2a2a;
+    margin: 16px 0;
+  }
+
+  .hint {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  .free-write-hint {
+    background: #1f1f1f;
+    border-left: 3px solid #6c63ff;
+    padding: 12px;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<h1>English Level Test</h1>
+<p class="subtitle">B2 → C1 · 25 soruda gerçek seviye tespiti</p>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progressFill"></div>
+</div>
+
+<!-- PART 1 -->
+<div class="section">
+  <div class="section-title">Part 1 — Natural or Not?</div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">1</span><span class="q-text">Hangisi daha doğal İngilizce?</span></div>
+    <div class="options" data-q="1" data-answer="A">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q1" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) I'd rather you <b>didn't</b> mention this to anyone.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q1" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) I'd rather you <b>don't</b> mention this to anyone.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">2</span><span class="q-text">Hangisi doğru yapı?</span></div>
+    <div class="options" data-q="2" data-answer="B">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q2" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) He denied <b>to have taken</b> the money.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q2" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) He denied <b>having taken</b> the money.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">3</span><span class="q-text">Hangisi doğru inversion yapısı?</span></div>
+    <div class="options" data-q="3" data-answer="A">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q3" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) Not only <b>did she finish</b> first, but she also broke the record.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q3" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) Not only <b>she finished</b> first, but she also broke the record.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">4</span><span class="q-text">Formal subjunctive — hangisi doğru?</span></div>
+    <div class="options" data-q="4" data-answer="A">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q4" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) It's vital that she <b>attend</b> the meeting.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q4" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) It's vital that she <b>attends</b> the meeting.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">5</span><span class="q-text">Hangisi native bir konuşmacı olarak arkadaşına söylersin?</span></div>
+    <div class="options" data-q="5" data-answer="B">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q5" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) I am very tired. I cannot continue working today.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q5" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) I'm absolutely knackered. I'm calling it a day.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- PART 2 -->
+<div class="section">
+  <div class="section-title">Part 2 — Connotation & Word Choice</div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">6</span><span class="q-text">Birini kibarca "ince" olarak iltifatla tanımlamak istiyorsun. Hangisi en uygun?</span></div>
+    <div class="chips" data-q="6" data-answer="slender">
+      <span class="chip" onclick="pickChip(this, 'slender')">slender</span>
+      <span class="chip" onclick="pickChip(this, 'skinny')">skinny</span>
+      <span class="chip" onclick="pickChip(this, 'thin')">thin</span>
+      <span class="chip" onclick="pickChip(this, 'scrawny')">scrawny</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">7</span><span class="q-text">"Çok pahalı" diyorsun ama şikayet değil, etkilenmiş gibi. Hangisi?</span></div>
+    <div class="chips" data-q="7" data-answer="steep">
+      <span class="chip" onclick="pickChip(this, 'expensive')">expensive</span>
+      <span class="chip" onclick="pickChip(this, 'steep')">steep</span>
+      <span class="chip" onclick="pickChip(this, 'costly')">costly</span>
+      <span class="chip" onclick="pickChip(this, 'pricey')">pricey</span>
+    </div>
+    <p class="hint">İpucu: Hangisi hem argo hem nötr hem de hayran kalan bir ton taşır?</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">8</span><span class="q-text">Toplantıda birinin fikrini nazikçe reddetmek istiyorsun. Hangisi en uygun?</span></div>
+    <div class="options" data-q="8" data-answer="C">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q8" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) I disagree with that.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q8" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) That's not right.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q8" value="C">
+        <div class="radio-dot"></div>
+        <span class="option-text">C) I'm not sure that's the best approach — have we considered...?</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q8" value="D">
+        <div class="radio-dot"></div>
+        <span class="option-text">D) No, I don't think so.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">9</span><span class="q-text">"Seni anlıyorum" — derin ve samimi, close friend'e. Hangisi?</span></div>
+    <div class="chips" data-q="9" data-answer="I hear you">
+      <span class="chip" onclick="pickChip(this, 'I understand')">I understand</span>
+      <span class="chip" onclick="pickChip(this, 'I see')">I see</span>
+      <span class="chip" onclick="pickChip(this, 'I hear you')">I hear you</span>
+      <span class="chip" onclick="pickChip(this, 'I get it')">I get it</span>
+    </div>
+  </div>
+</div>
+
+<!-- PART 3 -->
+<div class="section">
+  <div class="section-title">Part 3 — Error Correction</div>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Her cümlede 1 hata var. Düzelt + kısaca neden yanlış olduğunu yaz.</p>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">10</span><span class="q-text"></span></div>
+    <div class="gap-sentence">"If I <span class="blank">would have studied</span> harder, I would have passed."</div>
+    <div class="input-label">Düzeltme:</div>
+    <textarea class="text-input" data-q="10" placeholder="Doğru cümleyi yaz..." oninput="updateProgress()"></textarea>
+    <div class="input-label">Neden yanlış:</div>
+    <textarea class="text-input" data-q="10b" placeholder="Kısaca açıkla..." oninput="updateProgress()" style="min-height:60px;"></textarea>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">11</span><span class="q-text"></span></div>
+    <div class="gap-sentence">"She's been working <span class="blank">in Google</span> since she graduated."</div>
+    <div class="input-label">Düzeltme:</div>
+    <textarea class="text-input" data-q="11" placeholder="Doğru cümleyi yaz..." oninput="updateProgress()"></textarea>
+    <div class="input-label">Neden yanlış:</div>
+    <textarea class="text-input" data-q="11b" placeholder="Kısaca açıkla..." oninput="updateProgress()" style="min-height:60px;"></textarea>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">12</span><span class="q-text"></span></div>
+    <div class="gap-sentence">"<span class="blank">Despite of</span> being tired, he continued working."</div>
+    <div class="input-label">Düzeltme:</div>
+    <textarea class="text-input" data-q="12" placeholder="Doğru cümleyi yaz..." oninput="updateProgress()"></textarea>
+    <div class="input-label">Neden yanlış:</div>
+    <textarea class="text-input" data-q="12b" placeholder="Kısaca açıkla..." oninput="updateProgress()" style="min-height:60px;"></textarea>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">13</span><span class="q-text"></span></div>
+    <div class="gap-sentence">"He suggested that she should <span class="blank">reconsiders</span> her decision."</div>
+    <div class="input-label">Düzeltme:</div>
+    <textarea class="text-input" data-q="13" placeholder="Doğru cümleyi yaz..." oninput="updateProgress()"></textarea>
+    <div class="input-label">Neden yanlış:</div>
+    <textarea class="text-input" data-q="13b" placeholder="Kısaca açıkla..." oninput="updateProgress()" style="min-height:60px;"></textarea>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">14</span><span class="q-text"></span></div>
+    <div class="gap-sentence">"I'm used to <span class="blank">work</span> from home — it doesn't bother me."</div>
+    <div class="input-label">Düzeltme:</div>
+    <textarea class="text-input" data-q="14" placeholder="Doğru cümleyi yaz..." oninput="updateProgress()"></textarea>
+    <div class="input-label">Neden yanlış:</div>
+    <textarea class="text-input" data-q="14b" placeholder="Kısaca açıkla..." oninput="updateProgress()" style="min-height:60px;"></textarea>
+  </div>
+</div>
+
+<!-- PART 4 -->
+<div class="section">
+  <div class="section-title">Part 4 — What Do They Really Mean?</div>
+  <p style="font-size:13px;color:#666;margin-bottom:16px;">Native bir konuşmacı bunu söylüyor. Gerçekte ne demek istiyor?</p>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">15</span><span class="q-text">"That's one way to look at it."</span></div>
+    <div class="options" data-q="15" data-answer="B">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q15" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) Harika bir bakış açısı, çok beğendim.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q15" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) Senin fikrin yanlış ama nazikçe söylemiyorum.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q15" value="C">
+        <div class="radio-dot"></div>
+        <span class="option-text">C) Pek çok görüş var, hepsini düşünelim.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">16</span><span class="q-text">"With all due respect…" (cümle başında)</span></div>
+    <div class="options" data-q="16" data-answer="B">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q16" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) Sana gerçekten saygı duyuyorum ve düşünceni önemsiyorum.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q16" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) Seni kırmak istemiyorum ama tamamen yanılıyorsun.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q16" value="C">
+        <div class="radio-dot"></div>
+        <span class="option-text">C) Resmi bir ortamda saygı ifade etmek için kullanılan nötr bir giriş.</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">17</span><span class="q-text">Yemek teklif ettin, "I could eat." dedi. Ne demek?</span></div>
+    <div class="options" data-q="17" data-answer="B">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q17" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) Hayır teşekkürler, şu an yemek yiyebilecek durumda değilim.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q17" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) Evet, neden olmasın — yemek iyidir.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q17" value="C">
+        <div class="radio-dot"></div>
+        <span class="option-text">C) Çok acıktım, hemen yer miydim?</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">18</span><span class="q-text">Fikrinden bahsettin, "That's… interesting." dedi. Duraksayarak söyledi.</span></div>
+    <div class="options" data-q="18" data-answer="C">
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q18" value="A">
+        <div class="radio-dot"></div>
+        <span class="option-text">A) Fikrin gerçekten ilginç ve düşündürücü buldu.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q18" value="B">
+        <div class="radio-dot"></div>
+        <span class="option-text">B) Daha önce böyle bir şey duymamış, merakla dinliyor.</span>
+      </label>
+      <label class="option" onclick="pick(this)">
+        <input type="radio" name="q18" value="C">
+        <div class="radio-dot"></div>
+        <span class="option-text">C) Fikri beğenmedi ama nazikçe söylememeyi tercih etti.</span>
+      </label>
+    </div>
+  </div>
+</div>
+
+<!-- PART 5 -->
+<div class="section">
+  <div class="section-title">Part 5 — Advanced Fill the Gap</div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">19</span><span class="q-text">The deal fell _____ at the last minute.</span></div>
+    <div class="chips" data-q="19" data-answer="through">
+      <span class="chip" onclick="pickChip(this, 'apart')">apart</span>
+      <span class="chip" onclick="pickChip(this, 'through')">through</span>
+      <span class="chip" onclick="pickChip(this, 'down')">down</span>
+      <span class="chip" onclick="pickChip(this, 'off')">off</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">20</span><span class="q-text">I hate to _____ it to you, but the project was cancelled.</span></div>
+    <div class="chips" data-q="20" data-answer="break">
+      <span class="chip" onclick="pickChip(this, 'break')">break</span>
+      <span class="chip" onclick="pickChip(this, 'tell')">tell</span>
+      <span class="chip" onclick="pickChip(this, 'say')">say</span>
+      <span class="chip" onclick="pickChip(this, 'deliver')">deliver</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">21</span><span class="q-text">She's the kind of person who _____ to get what she wants.</span></div>
+    <div class="chips" data-q="21" data-answer="stops at nothing">
+      <span class="chip" onclick="pickChip(this, 'stops at nothing')">stops at nothing</span>
+      <span class="chip" onclick="pickChip(this, 'does everything')">does everything</span>
+      <span class="chip" onclick="pickChip(this, 'tries all')">tries all</span>
+      <span class="chip" onclick="pickChip(this, 'goes to extremes')">goes to extremes</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="question">
+    <div class="q-label"><span class="q-num">22</span><span class="q-text">We've been going _____ and _____ on this for weeks. (aynı kelime iki kez)</span></div>
+    <div class="chips" data-q="22" data-answer="back and forth">
+      <span class="chip" onclick="pickChip(this, 'back and forth')">back and forth</span>
+      <span class="chip" onclick="pickChip(this, 'up and down')">up and down</span>
+      <span class="chip" onclick="pickChip(this, 'round and round')">round and round</span>
+      <span class="chip" onclick="pickChip(this, 'in and out')">in and out</span>
+    </div>
+  </div>
+</div>
+
+<!-- PART 6 -->
+<div class="section">
+  <div class="section-title">Part 6 — Free Writing</div>
+  <div class="free-write-hint">
+    📱 Yakın arkadaşına mesaj atıyorsun. Bugün her şey ters gitti — inanılmaz kötü bir gündü. Ne olduğunu, nasıl hissettiğini ve ne yaptığını yaz. <b>Tam olarak gerçekte nasıl yazardın öyle yaz</b> — slang, kısaltma, her şey serbest.
+  </div>
+  <textarea data-q="free" placeholder="Start typing here..." style="min-height: 160px;" oninput="updateProgress()"></textarea>
+  <p class="hint">Gramer test edilmiyor. Ton, doğallık ve kelime seçimi değerlendiriliyor.</p>
+</div>
+
+<button class="submit-btn" onclick="submitTest()">Testi Tamamla & Sonuçları Gönder</button>
+
+<div class="result-box" id="resultBox">
+  <div class="result-score" id="resultScore"></div>
+  <div class="result-level" id="resultLevel"></div>
+  <div class="result-msg" id="resultMsg"></div>
+  <button class="copy-btn" onclick="copyAnswers()">📋 Cevaplarımı Kopyala → Claude'a Yapıştır</button>
+</div>
+
+<script>
+const answers = {};
+
+function pick(label) {
+  const group = label.closest('.options');
+  group.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  label.classList.add('selected');
+  const val = label.querySelector('input').value;
+  const qnum = label.querySelector('input').name.replace('q','');
+  answers['q' + qnum] = val;
+  updateProgress();
+}
+
+function pickChip(chip, val) {
+  const group = chip.closest('.chips');
+  const qnum = group.dataset.q;
+  group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  chip.classList.add('selected');
+  answers['q' + qnum] = val;
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = 22;
+  let filled = 0;
+  for (let i = 1; i <= 22; i++) {
+    if (answers['q' + i] || document.querySelector('[data-q="' + i + '"]')?.value?.trim()) filled++;
+  }
+  const freeText = document.querySelector('[data-q="free"]')?.value?.trim();
+  if (freeText) filled++;
+  const pct = Math.min(100, Math.round((filled / 23) * 100));
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+
+function submitTest() {
+  const resultBox = document.getElementById('resultBox');
+
+  const correctAnswers = {
+    q1: 'A', q2: 'B', q3: 'A', q4: 'A', q5: 'B',
+    q6: 'slender', q7: 'steep', q8: 'C', q9: 'I hear you',
+    q15: 'B', q16: 'B', q17: 'B', q18: 'C',
+    q19: 'through', q20: 'break', q21: 'stops at nothing', q22: 'back and forth'
+  };
+
+  let correct = 0;
+  let total = Object.keys(correctAnswers).length;
+
+  for (const [key, val] of Object.entries(correctAnswers)) {
+    if (answers[key] === val) correct++;
+  }
+
+  const pct = Math.round((correct / total) * 100);
+  let level, msg;
+
+  if (pct >= 88) {
+    level = "C1 — Upper Advanced";
+    msg = "Native gibi kelime seçimi ve pragmatics konusunda çok güçlüsün. Eksik noktalar idiom derinliği ve register kontrolünde olabilir. Hedef: C2.";
+  } else if (pct >= 72) {
+    level = "Upper B2 — Pre-Advanced";
+    msg = "Gramer temelin sağlam ama native tonunu yakalamak için idiom, slang ve pragmatics üzerine yoğunlaşman gerekiyor.";
+  } else if (pct >= 55) {
+    level = "B2 — Intermediate";
+    msg = "Temel yapılar doğru ama connotation, inversion ve doğal ses konularında boşluklar var. Güzel bir başlangıç noktası.";
+  } else {
+    level = "B1-B2 — Intermediate";
+    msg = "Temeller güçlü ama B2→C1 geçiş noktalarında (subjunctive, inversion, register) çalışmak gerekiyor.";
+  }
+
+  document.getElementById('resultScore').textContent = pct + '%';
+  document.getElementById('resultLevel').textContent = level;
+  document.getElementById('resultMsg').textContent = msg;
+  resultBox.classList.add('show');
+  resultBox.scrollIntoView({ behavior: 'smooth' });
+}
+
+function copyAnswers() {
+  let out = "=== LEVEL TEST CEVAPLARI ===\n\n";
+  out += "PART 1 (Natural or Not):\n";
+  for (let i = 1; i <= 5; i++) out += `  ${i}. ${answers['q'+i] || '—'}\n`;
+  out += "\nPART 2 (Word Choice):\n";
+  [6,7,8,9].forEach(i => out += `  ${i}. ${answers['q'+i] || '—'}\n`);
+  out += "\nPART 3 (Error Correction):\n";
+  [10,11,12,13,14].forEach(i => {
+    const fix = document.querySelector(`[data-q="${i}"]`)?.value?.trim() || '—';
+    const why = document.querySelector(`[data-q="${i}b"]`)?.value?.trim() || '—';
+    out += `  ${i}. Düzeltme: ${fix} | Neden: ${why}\n`;
+  });
+  out += "\nPART 4 (Pragmatics):\n";
+  [15,16,17,18].forEach(i => out += `  ${i}. ${answers['q'+i] || '—'}\n`);
+  out += "\nPART 5 (Fill the Gap):\n";
+  [19,20,21,22].forEach(i => out += `  ${i}. ${answers['q'+i] || '—'}\n`);
+  out += "\nPART 6 (Free Writing):\n";
+  const free = document.querySelector('[data-q="free"]')?.value?.trim() || '—';
+  out += free + "\n";
+  out += "\n============================\n";
+  out += "Bu cevapları analiz et ve detaylı seviye raporu çıkar.";
+
+  navigator.clipboard.writeText(out).then(() => {
+    document.querySelector('.copy-btn').textContent = '✓ Kopyalandı! Şimdi Claude\'a yapıştır.';
+  });
+}
+</script>
+</body>
+</html>
